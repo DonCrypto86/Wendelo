@@ -167,3 +167,8 @@ footer .footerBrand img:last-child{width:155px;height:auto;margin-bottom:5px}
 footer .footerCreator img{width:190px;height:auto;display:block}
 @media(max-width:820px){footer{align-items:flex-start;gap:26px}.footerCreator{margin-left:0}.footerWendelo p{width:auto;order:initial}.footerBrand{gap:8px}footer .footerBrand img:first-child{width:47px;height:47px;transform:translateY(-9px)}footer .footerBrand img:last-child{width:118px;margin-bottom:4px}}
 @media(max-width:520px){footer{flex-direction:column}.footerCreator{width:100%}footer .footerCreator img{width:170px}}
+
+/* Keep both product CTAs aligned at the bottom of their cards */
+.plan{display:flex;flex-direction:column}
+.plan>a{margin-top:auto;padding-top:15px;padding-bottom:15px}
+.price,.enterpriseNote{margin-bottom:28px}
