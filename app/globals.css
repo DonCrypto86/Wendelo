@@ -202,3 +202,7 @@ footer .footerCreator img{width:190px;height:auto;display:block}
   .navCta{line-height:1;align-items:center}
   .navCta svg{position:relative;top:-1px}
 }
+
+/* Center label and arrow inside the secondary hero CTA */
+.actions .secondary{line-height:1;align-items:center}
+.actions .secondary svg{display:block;flex:0 0 auto}
