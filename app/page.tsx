@@ -39,7 +39,7 @@ export default function Home() {
       </div>
       <div className="heroVisual" aria-label="Vista previa de un catálogo Wendelo">
         <div className="glow"></div>
-        <div className="phone">
+        <div className="phone videoPhone">
           <video className="phoneVideo" autoPlay muted loop playsInline preload="metadata" aria-label="Demostración del catálogo Liz-Store">
             <source src="/media/liz-store-demo.mp4" type="video/mp4" />
           </video>
