@@ -32,7 +32,7 @@ export default function Home() {
     <section className="hero shell" id="inicio">
       <div className="heroCopy">
         <span className="eyebrow">CATÁLOGOS DIGITALES PARA VENDER POR WHATSAPP</span>
-        <h1><em>Por qué subir 30 fotos a tu Estado si un solo enlace basta para guiar a tus clientes?</em></h1>
+        <h1><em>Por qué subir 30 fotos a tu Estado</em><span>si un solo enlace basta para guiar a tus clientes?</span></h1>
         <p>Compartí solamente un flyer o un producto en oferta. Tus contactos abren el enlace y descubren todo tu catálogo, siempre disponible y actualizado.</p>
         <div className="actions"><a className="primary" href={message("Hola, quiero mi catálogo Wendelo.")} target="_blank">Quiero mi catálogo <ArrowRight size={19}/></a><a className="secondary" href="#como-funciona">Ver cómo funciona</a></div>
         <div className="trust"><span><Check/> Diseño personalizado</span><span><Check/> Administración simple</span><span><Check/> Hecho para Paraguay</span></div>

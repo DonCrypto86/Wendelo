@@ -42,9 +42,10 @@ body,button,a,input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif}h
 @media(prefers-reduced-motion:reduce){.glow{animation:none}}
 
 /* Responsive hero typography for the longer core message */
-.hero h1{font-size:clamp(46px,5vw,72px);line-height:1.04}
-@media(max-width:820px){.hero h1{font-size:43px;line-height:1.08}}
-@media(max-width:420px){.hero h1{font-size:38px}}
+.hero h1{font-size:clamp(40px,4.35vw,62px);line-height:1.06}
+.hero h1 span{display:block;color:#06133d;font-style:normal;font-weight:650;margin-top:.12em}
+@media(max-width:820px){.hero h1{font-size:36px;line-height:1.1}}
+@media(max-width:420px){.hero h1{font-size:32px}}
 
 /* Same pastel palette as the animated hero circle, kept static here */
 .benefitVisual{background:radial-gradient(circle at 24% 25%,#dfffee 0 22%,transparent 55%),radial-gradient(circle at 78% 30%,#dce8ff 0 20%,transparent 58%),radial-gradient(circle at 70% 82%,#f1ddff 0 22%,transparent 57%),radial-gradient(circle at 24% 78%,#ffe8d9 0 20%,transparent 58%),#d9f7ff}
