@@ -21,7 +21,10 @@ const faqs = [
 export default function Home() {
   return <main>
     <header className="nav shell">
-      <a href="#inicio" className="brand" aria-label="Wendelo inicio"><Image src="/brand/wendelo-wordmark.png" alt="Wendelo" width={300} height={74} priority /></a>
+      <a href="#inicio" className="brand" aria-label="Wendelo inicio">
+        <Image className="brandSymbol" src="/brand/wendelo-symbol.png" alt="" width={58} height={58} priority />
+        <Image className="brandWordmark" src="/brand/wendelo-wordmark.png" alt="Wendelo" width={300} height={74} priority />
+      </a>
       <nav><a href="#como-funciona">Cómo funciona</a><a href="#soluciones">Soluciones</a><a href="#preguntas">Preguntas</a></nav>
       <a className="navCta" href={message("Hola, quiero conocer Wendelo.")} target="_blank"><MessageCircle size={18}/> Hablemos</a>
     </header>
