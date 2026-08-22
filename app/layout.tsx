@@ -3,7 +3,7 @@ import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Wendelo | Tu catálogo digital para WhatsApp",
+  title: "WENDELO | Tu catálogo digital para WhatsApp",
   description: "Catálogos digitales simples para vender por WhatsApp en Paraguay.",
 };
 
