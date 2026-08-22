@@ -27,3 +27,13 @@ main{padding-top:92px}.nav{position:fixed;z-index:1000;top:0;left:0;width:100%;m
 /* Wendelo typography */
 body,button,a,input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif}h1,h2,h3{font-family:'Lora',serif}
 .hero h1,.sectionHead h2,.problem h2,.benefits h2,.demo h2,.finalCta h2,.miniHero strong,.products span,.steps h3,.plan h3,.price strong,.demoCard>strong{font-family:'Lora',serif}
+
+/* Slow pastel pulse behind the phone */
+.glow{animation:pastelPulse 14s ease-in-out infinite;will-change:transform,background,box-shadow}
+@keyframes pastelPulse{
+  0%,100%{transform:scale(.96);background:linear-gradient(135deg,#dfffee,#dce8ff 58%,#d9f7ff);box-shadow:0 0 55px rgba(18,76,255,.05)}
+  25%{transform:scale(1.025);background:linear-gradient(145deg,#e7ddff,#d9edff 55%,#dffcf2);box-shadow:0 0 75px rgba(126,96,255,.09)}
+  50%{transform:scale(.985);background:linear-gradient(135deg,#fff0df,#ffe2ef 48%,#e5e2ff);box-shadow:0 0 65px rgba(255,157,177,.08)}
+  75%{transform:scale(1.04);background:linear-gradient(145deg,#dcf8ff,#dfffe8 52%,#fff2cf);box-shadow:0 0 80px rgba(0,219,120,.08)}
+}
+@media(prefers-reduced-motion:reduce){.glow{animation:none}}
