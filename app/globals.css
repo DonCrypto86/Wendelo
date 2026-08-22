@@ -33,11 +33,11 @@ body,button,a,input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif}h
 /* Slow pastel pulse behind the phone */
 .glow{width:588px;height:588px;background:radial-gradient(circle at 24% 25%,#dfffee 0 22%,transparent 55%),radial-gradient(circle at 78% 30%,#dce8ff 0 20%,transparent 58%),radial-gradient(circle at 70% 82%,#f1ddff 0 22%,transparent 57%),radial-gradient(circle at 24% 78%,#ffe8d9 0 20%,transparent 58%),#d9f7ff;animation:pastelPulse 18s linear infinite;will-change:transform,filter,box-shadow}
 @keyframes pastelPulse{
-  0%{transform:scale(.96);filter:hue-rotate(0deg);box-shadow:0 0 55px rgba(18,76,255,.05)}
-  25%{transform:scale(1.025);filter:hue-rotate(90deg);box-shadow:0 0 75px rgba(126,96,255,.09)}
-  50%{transform:scale(.985);filter:hue-rotate(180deg);box-shadow:0 0 65px rgba(255,157,177,.08)}
+  0%{transform:scale(.72);filter:hue-rotate(0deg);box-shadow:0 0 55px rgba(18,76,255,.05)}
+  25%{transform:scale(1.04);filter:hue-rotate(90deg);box-shadow:0 0 75px rgba(126,96,255,.09)}
+  50%{transform:scale(.72);filter:hue-rotate(180deg);box-shadow:0 0 65px rgba(255,157,177,.08)}
   75%{transform:scale(1.04);filter:hue-rotate(270deg);box-shadow:0 0 80px rgba(0,219,120,.08)}
-  100%{transform:scale(.96);filter:hue-rotate(360deg);box-shadow:0 0 55px rgba(18,76,255,.05)}
+  100%{transform:scale(.72);filter:hue-rotate(360deg);box-shadow:0 0 55px rgba(18,76,255,.05)}
 }
 @media(prefers-reduced-motion:reduce){.glow{animation:none}}
 
