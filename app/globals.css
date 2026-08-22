@@ -108,3 +108,29 @@ footer{
 @keyframes stepMeshFlow{0%{background-position:0% 0%}50%{background-position:70% 35%}100%{background-position:100% 100%}}
 
 @media(prefers-reduced-motion:reduce){.benefitLogo,.benefitLogo::after,.steps article{animation:none}}
+
+/* Real-client card with a subtle Liz-Store watermark and logo-only shine */
+.demoCard{position:relative;overflow:hidden;isolation:isolate}
+.demoCard::before{
+  content:"";
+  position:absolute;
+  inset:18px;
+  z-index:-2;
+  background:url('/brand/liz-store-logo.png') center/82% auto no-repeat;
+  opacity:.075;
+}
+.demoCard::after{
+  content:"";
+  position:absolute;
+  inset:18px;
+  z-index:-1;
+  pointer-events:none;
+  background:linear-gradient(110deg,transparent 37%,rgba(255,255,255,.05) 44%,rgba(190,131,255,.32) 50%,rgba(255,255,255,.08) 56%,transparent 63%);
+  background-size:300% 100%;
+  background-position:150% 0;
+  -webkit-mask:url('/brand/liz-store-logo.png') center/82% auto no-repeat;
+  mask:url('/brand/liz-store-logo.png') center/82% auto no-repeat;
+  animation:lizLogoShine 10s ease-in-out infinite;
+}
+@keyframes lizLogoShine{0%,60%{background-position:150% 0;opacity:0}64%{opacity:1}80%{background-position:-50% 0;opacity:1}84%,100%{background-position:-50% 0;opacity:0}}
+@media(prefers-reduced-motion:reduce){.demoCard::after{animation:none}}
