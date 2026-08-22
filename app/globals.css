@@ -65,3 +65,43 @@ footer{
     radial-gradient(circle at 73% -30%,rgba(241,221,255,.22) 0 13%,transparent 34%),
     radial-gradient(circle at 100% 75%,rgba(255,232,217,.20) 0 10%,transparent 29%);
 }
+
+/* Animated Wendelo symbol: gentle growth with an occasional masked shine */
+.benefitVisual{position:relative;overflow:hidden}
+.benefitVisual img{position:relative;z-index:1;animation:wendeloSymbolPulse 6s ease-in-out infinite;will-change:transform}
+.benefitVisual::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  background:linear-gradient(110deg,transparent 38%,rgba(255,255,255,.08) 44%,rgba(255,255,255,.78) 50%,rgba(255,255,255,.08) 56%,transparent 62%);
+  transform:translateX(-115%);
+  -webkit-mask-image:url('/brand/wendelo-symbol.png');
+  mask-image:url('/brand/wendelo-symbol.png');
+  -webkit-mask-repeat:no-repeat;
+  mask-repeat:no-repeat;
+  -webkit-mask-position:center;
+  mask-position:center;
+  -webkit-mask-size:52% auto;
+  mask-size:52% auto;
+  animation:wendeloShine 9s ease-in-out infinite;
+}
+@keyframes wendeloSymbolPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.14)}}
+@keyframes wendeloShine{0%,58%{transform:translateX(-115%);opacity:0}62%{opacity:1}78%{transform:translateX(115%);opacity:1}82%,100%{transform:translateX(115%);opacity:0}}
+
+/* Moving pastel mesh, restricted to the four process cards */
+.steps article{
+  background:
+    radial-gradient(circle at 5% 10%,rgba(223,255,238,.78) 0 9%,transparent 34%),
+    radial-gradient(circle at 95% 5%,rgba(220,232,255,.72) 0 10%,transparent 36%),
+    radial-gradient(circle at 90% 100%,rgba(241,221,255,.58) 0 10%,transparent 34%),
+    radial-gradient(circle at 5% 95%,rgba(255,232,217,.50) 0 9%,transparent 32%),
+    #fff;
+  background-size:145% 145%;
+  animation:stepMeshFlow 16s ease-in-out infinite alternate;
+}
+.steps article:nth-child(2){animation-delay:-4s}.steps article:nth-child(3){animation-delay:-8s}.steps article:nth-child(4){animation-delay:-12s}
+@keyframes stepMeshFlow{0%{background-position:0% 0%}50%{background-position:70% 35%}100%{background-position:100% 100%}}
+
+@media(prefers-reduced-motion:reduce){.benefitVisual img,.benefitVisual::after,.steps article{animation:none}}
