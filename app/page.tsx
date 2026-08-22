@@ -32,8 +32,8 @@ export default function Home() {
     <section className="hero shell" id="inicio">
       <div className="heroCopy">
         <span className="eyebrow">CATÁLOGOS DIGITALES PARA VENDER POR WHATSAPP</span>
-        <h1><em>30 productos.</em><br/>Un solo Estado.</h1>
-        <p>Mostrá todo lo que vendés con un catálogo simple, atractivo y siempre actualizado. Tus clientes eligen; la conversación continúa en WhatsApp.</p>
+        <h1><em>¿30 fotos en tu Estado?</em><br/>Mejor, un solo enlace.</h1>
+        <p>Compartí solamente un flyer o un producto en oferta. Tus contactos abren el enlace y descubren todo tu catálogo, siempre disponible y actualizado.</p>
         <div className="actions"><a className="primary" href={message("Hola, quiero mi catálogo Wendelo.")} target="_blank">Quiero mi catálogo <ArrowRight size={19}/></a><a className="secondary" href="#como-funciona">Ver cómo funciona</a></div>
         <div className="trust"><span><Check/> Diseño personalizado</span><span><Check/> Administración simple</span><span><Check/> Hecho para Paraguay</span></div>
       </div>
@@ -51,7 +51,7 @@ export default function Home() {
     </section>
 
     <section className="problem">
-      <div className="shell problemGrid"><div><span className="eyebrow">MENOS CAOS, MÁS VENTAS</span><h2>Tu negocio merece algo mejor que 30 fotos sueltas.</h2></div><div><p>Fotos perdidas en el chat, precios viejos y clientes preguntando una y otra vez lo mismo.</p><p className="accent">Wendelo convierte todo eso en una experiencia clara y profesional.</p></div></div>
+      <div className="shell problemGrid"><div><span className="eyebrow">MENOS CAOS, MÁS VENTAS</span><h2>Nadie quiere mirar decenas de fotos en un Estado.</h2></div><div><p>Además, desaparecen después de 24 horas y tenés que volver a publicar todo una y otra vez.</p><p className="accent">Con Wendelo compartís una sola oferta y tus contactos descubren automáticamente todo tu catálogo.</p></div></div>
     </section>
 
     <section className="how shell" id="como-funciona">
@@ -62,7 +62,7 @@ export default function Home() {
     <section className="solutions" id="soluciones"><div className="shell">
       <div className="sectionHead center"><span className="eyebrow">DOS SOLUCIONES, UNA MISMA IDEA</span><h2>Elegí el Wendelo que acompaña tu negocio</h2></div>
       <div className="plans">
-        <article className="plan featured"><div className="planIcon"><Store/></div><span className="tag">PARA EMPRENDEDORES Y COMERCIOS</span><h3>Wendelo</h3><p>Tu catálogo digital personalizado para mostrar productos y recibir consultas por WhatsApp.</p><ul><li><Check/> Hasta 30 productos</li><li><Check/> Diseño con tu logo y colores</li><li><Check/> Panel privado de administración</li><li><Check/> Filtros, precios y botón de WhatsApp</li><li><Check/> Primer año incluido</li></ul><div className="price"><small>IMPLEMENTACIÓN ÚNICA</small><strong>Gs. 600.000</strong><span>Desde el segundo año: Gs. 180.000/año</span></div><a href={message("Hola, quiero contratar Wendelo para mi negocio.")} target="_blank">Quiero mi Wendelo <ArrowRight/></a></article>
+        <article className="plan featured"><div className="planIcon"><Store/></div><span className="tag">PARA EMPRENDEDORES Y COMERCIOS</span><h3>Wendelo</h3><p>Tu catálogo digital personalizado para mostrar productos y recibir consultas por WhatsApp.</p><ul><li><Check/> Tu catálogo completo y organizado</li><li><Check/> Diseño con tu logo y colores</li><li><Check/> Panel privado de administración</li><li><Check/> Filtros, precios y botón de WhatsApp</li><li><Check/> Primer año incluido</li></ul><div className="price"><small>IMPLEMENTACIÓN ÚNICA</small><strong>Gs. 600.000</strong><span>Desde el segundo año: Gs. 180.000/año</span></div><a href={message("Hola, quiero contratar Wendelo para mi negocio.")} target="_blank">Quiero mi Wendelo <ArrowRight/></a></article>
         <article className="plan enterprise"><div className="planIcon"><Building2/></div><span className="tag">PARA EQUIPOS DE VENTA Y EMPRESAS</span><h3>Wendelo <em>Empresas</em></h3><p>Catálogos personales para cada vendedor, con imagen unificada y gestión central para toda la empresa.</p><ul><li><Check/> Un catálogo por vendedor</li><li><Check/> Gestión centralizada de productos</li><li><Check/> Identidad visual consistente</li><li><Check/> Métricas por vendedor o campaña</li><li><Check/> Implementación mediante piloto</li></ul><div className="enterpriseNote"><Users/><div><strong>Propuesta a medida</strong><span>Definimos juntos el alcance ideal para tu equipo.</span></div></div><a href={message("Hola, quiero solicitar una demostración de Wendelo Empresas.")} target="_blank">Solicitar una demostración <ArrowRight/></a></article>
       </div>
     </div></section>
