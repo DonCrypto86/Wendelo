@@ -52,7 +52,7 @@ export default function Home() {
     </section>
 
     <section className="problem">
-      <div className="shell problemGrid"><div><span className="eyebrow">MENOS CAOS, MÁS VENTAS</span><h2>Nadie quiere mirar decenas de fotos en un Estado.</h2></div><div><p>Además, desaparecen después de 24 horas y tenés que volver a publicar todo una y otra vez.</p><p className="accent">Con Wendelo compartís una sola oferta y tus contactos descubren automáticamente todo tu catálogo.</p></div></div>
+      <div className="shell problemGrid"><div><span className="eyebrow">MENOS CAOS, MÁS VENTAS</span><h2>Nadie quiere mirar una docena de fotos en tu Estado.</h2></div><div><p>Además, desaparecen después de 24 horas y tenés que volver a publicar todo una y otra vez.</p><p className="accent">Con Wendelo compartís una sola oferta y tus contactos descubren automáticamente todo tu catálogo.</p></div></div>
     </section>
 
     <section className="how shell" id="como-funciona">
