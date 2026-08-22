@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ArrowRight, BarChart3, Building2, Check, ChevronDown, MessageCircle, Palette, Share2, Smartphone, Store, Users } from "lucide-react";
+import { ArrowRight, BarChart3, Building2, Check, ChevronDown, Clock3, MessageCircle, Palette, Share2, Smartphone, Store, TrendingUp, Users } from "lucide-react";
 
 const whatsapp = "https://wa.me/595983048976?text=";
 const message = (text: string) => `${whatsapp}${encodeURIComponent(text)}`;
@@ -45,8 +45,10 @@ export default function Home() {
           <div className="chips"><i>Todos</i><i>Ofertas</i><i>Nuevos</i></div>
           <div className="products"><div><b>Nuevo</b><span>Producto favorito</span><strong>Gs. 89.000</strong></div><div><b>Nuevo</b><span>Selección especial</span><strong>Gs. 120.000</strong></div></div>
         </div>
-        <div className="floating one"><Share2/> Compartí por WhatsApp</div>
-        <div className="floating two"><BarChart3/> Fácil de administrar</div>
+        <div className="floating sequence one"><Share2/> Compartí por WhatsApp</div>
+        <div className="floating sequence two"><BarChart3/> Fácil de administrar</div>
+        <div className="floating sequence three"><Clock3/> Ahorrá tiempo</div>
+        <div className="floating sequence four"><TrendingUp/> Optimizá tus ventas</div>
       </div>
     </section>
 
