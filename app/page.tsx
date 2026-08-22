@@ -40,10 +40,9 @@ export default function Home() {
       <div className="heroVisual" aria-label="Vista previa de un catálogo Wendelo">
         <div className="glow"></div>
         <div className="phone">
-          <div className="phoneTop"><Image src="/brand/wendelo-symbol.png" alt="" width={34} height={34}/><span>Mi catálogo</span><MessageCircle size={18}/></div>
-          <div className="miniHero"><small>NUEVA COLECCIÓN</small><strong>Todo lo que buscás,<br/>más cerca.</strong></div>
-          <div className="chips"><i>Todos</i><i>Ofertas</i><i>Nuevos</i></div>
-          <div className="products"><div><b>Nuevo</b><span>Producto favorito</span><strong>Gs. 89.000</strong></div><div><b>Nuevo</b><span>Selección especial</span><strong>Gs. 120.000</strong></div></div>
+          <video className="phoneVideo" autoPlay muted loop playsInline preload="metadata" aria-label="Demostración del catálogo Liz-Store">
+            <source src="/media/liz-store-demo.mp4" type="video/mp4" />
+          </video>
         </div>
         <div className="floating sequence one"><Share2/> Compartí por WhatsApp</div>
         <div className="floating sequence two"><BarChart3/> Fácil de administrar</div>
