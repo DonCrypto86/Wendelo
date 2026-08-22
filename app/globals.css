@@ -152,4 +152,4 @@ footer{
 @media(prefers-reduced-motion:reduce){.floating.sequence{animation:none}.floating.sequence.one{opacity:1}}
 
 /* Real Liz-Store recording inside the phone mockup */
-.phoneVideo{display:block;width:100%;height:100%;object-fit:cover;background:#fff}
+.phoneVideo{display:block;width:100%;height:110%;object-fit:cover;object-position:center top;background:#fff;transform:translateY(-8%)}
