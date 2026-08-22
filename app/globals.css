@@ -68,27 +68,29 @@ footer{
 
 /* Animated Wendelo symbol: gentle growth with an occasional masked shine */
 .benefitVisual{position:relative;overflow:hidden}
-.benefitVisual img{position:relative;z-index:1;animation:wendeloSymbolPulse 6s ease-in-out infinite;will-change:transform}
-.benefitVisual::after{
+.benefitLogo{position:relative;z-index:1;width:52%;animation:wendeloSymbolPulse 6s ease-in-out infinite;will-change:transform}
+.benefitLogo img{display:block;width:100%;height:auto;object-fit:contain}
+.benefitLogo::after{
   content:"";
   position:absolute;
   inset:0;
   z-index:2;
   pointer-events:none;
-  background:linear-gradient(110deg,transparent 38%,rgba(255,255,255,.08) 44%,rgba(255,255,255,.78) 50%,rgba(255,255,255,.08) 56%,transparent 62%);
-  transform:translateX(-115%);
+  background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.08) 43%,rgba(255,255,255,.88) 50%,rgba(255,255,255,.08) 57%,transparent 65%);
+  background-size:300% 100%;
+  background-position:150% 0;
   -webkit-mask-image:url('/brand/wendelo-symbol.png');
   mask-image:url('/brand/wendelo-symbol.png');
   -webkit-mask-repeat:no-repeat;
   mask-repeat:no-repeat;
   -webkit-mask-position:center;
   mask-position:center;
-  -webkit-mask-size:52% auto;
-  mask-size:52% auto;
+  -webkit-mask-size:contain;
+  mask-size:contain;
   animation:wendeloShine 9s ease-in-out infinite;
 }
-@keyframes wendeloSymbolPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.14)}}
-@keyframes wendeloShine{0%,58%{transform:translateX(-115%);opacity:0}62%{opacity:1}78%{transform:translateX(115%);opacity:1}82%,100%{transform:translateX(115%);opacity:0}}
+@keyframes wendeloSymbolPulse{0%,100%{transform:scale(.68)}50%{transform:scale(1.42)}}
+@keyframes wendeloShine{0%,58%{background-position:150% 0;opacity:0}62%{opacity:1}78%{background-position:-50% 0;opacity:1}82%,100%{background-position:-50% 0;opacity:0}}
 
 /* Moving pastel mesh, restricted to the four process cards */
 .steps article{
@@ -104,4 +106,4 @@ footer{
 .steps article:nth-child(2){animation-delay:-4s}.steps article:nth-child(3){animation-delay:-8s}.steps article:nth-child(4){animation-delay:-12s}
 @keyframes stepMeshFlow{0%{background-position:0% 0%}50%{background-position:70% 35%}100%{background-position:100% 100%}}
 
-@media(prefers-reduced-motion:reduce){.benefitVisual img,.benefitVisual::after,.steps article{animation:none}}
+@media(prefers-reduced-motion:reduce){.benefitLogo,.benefitLogo::after,.steps article{animation:none}}
