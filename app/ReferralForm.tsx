@@ -43,10 +43,12 @@ export default function ReferralForm() {
       <input type="hidden" name="subject" value="Solicitud de link de referido - WENDELO" />
       <input type="hidden" name="from_name" value="WENDELO Referidos" />
       <input type="text" name="name" required placeholder="Tu nombre" />
+      <input type="text" name="cedula" required placeholder="Tu cédula" />
       <input type="tel" name="whatsapp" required placeholder="Tu WhatsApp (+595 9xx xxx xxx)" />
       <button type="submit" disabled={status === "sending"}>
         {status === "sending" ? "Enviando..." : <>Solicitar mi link <Send size={14} /></>}
       </button>
+      <p className="referralFormNote">Usamos tu cédula únicamente para identificarte al momento de pagar tu comisión. Ver <a href="/terminos#referidos">Términos del Programa de Referidos</a>.</p>
       {status === "error" && (
         <p className="referralFormError">Hubo un error al enviar tu solicitud. Probá de nuevo.</p>
       )}
