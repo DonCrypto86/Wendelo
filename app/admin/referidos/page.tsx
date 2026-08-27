@@ -1,8 +1,9 @@
-// Zielpfad im Repo: app/admin/referidos/page.tsx
+// Zielpfad im Repo: app/admin/referidos/page.tsx (ersetzt die bestehende Datei)
 import { redirect } from "next/navigation";
 import { createClient } from "../../lib/supabase/server";
 import { signOutAdmin } from "./actions";
 import { StatusSelect, NotesField, STATUS_LABELS } from "./LeadControls";
+import { CommissionSelect, CreateLoginButton } from "./ReferrerControls";
 
 type Referrer = {
   id: string;
@@ -11,6 +12,9 @@ type Referrer = {
   whatsapp: string;
   code: string;
   created_at: string;
+  user_id: string | null;
+  commission_percent: number | null;
+  onboarded: boolean;
 };
 
 type ReferralLead = {
@@ -65,9 +69,20 @@ export default async function ReferidosAdminPage() {
     }
   }
 
-  const totalCustomers = leads.filter((l) => l.status === "cliente").length;
-  const totalPaid = leads.filter((l) => l.status === "pagado").length;
-  const pendingPayoutGs = totalCustomers * 90000;
+  function commissionGs(referrer: Referrer | undefined, count: number) {
+    if (!referrer?.commission_percent) return null;
+    return Math.round((referrer.commission_percent / 100) * 600000 * count);
+  }
+
+  let totalPendingGs = 0;
+  let totalPaidGs = 0;
+  for (const lead of leads) {
+    const referrer = lead.referrer_id ? referrerById.get(lead.referrer_id) : undefined;
+    if (!referrer?.commission_percent) continue;
+    const amount = Math.round((referrer.commission_percent / 100) * 600000);
+    if (lead.status === "cliente") totalPendingGs += amount;
+    if (lead.status === "pagado") totalPaidGs += amount;
+  }
 
   return (
     <main className="adminReferidosPage">
@@ -88,12 +103,12 @@ export default async function ReferidosAdminPage() {
           <span>Leads totales</span>
         </div>
         <div>
-          <strong>{totalCustomers}</strong>
-          <span>Por pagar (Gs. {pendingPayoutGs.toLocaleString("es-PY")})</span>
+          <strong>Gs. {totalPendingGs.toLocaleString("es-PY")}</strong>
+          <span>Por pagar</span>
         </div>
         <div>
-          <strong>{totalPaid}</strong>
-          <span>Comisiones pagadas</span>
+          <strong>Gs. {totalPaidGs.toLocaleString("es-PY")}</strong>
+          <span>Ya pagado</span>
         </div>
       </div>
 
@@ -108,6 +123,8 @@ export default async function ReferidosAdminPage() {
                 <th>WhatsApp</th>
                 <th>Cédula</th>
                 <th>Leads</th>
+                <th>Comisión</th>
+                <th>Login</th>
                 <th>Desde</th>
               </tr>
             </thead>
@@ -121,12 +138,18 @@ export default async function ReferidosAdminPage() {
                   <td>{r.whatsapp}</td>
                   <td>{r.cedula}</td>
                   <td>{leadCountByReferrer.get(r.id) ?? 0}</td>
+                  <td>
+                    <CommissionSelect referrerId={r.id} commissionPercent={r.commission_percent} />
+                  </td>
+                  <td>
+                    <CreateLoginButton referrerId={r.id} hasLogin={Boolean(r.user_id)} />
+                  </td>
                   <td>{new Date(r.created_at).toLocaleDateString("es-PY")}</td>
                 </tr>
               ))}
               {referrers.length === 0 && (
                 <tr>
-                  <td colSpan={6}>Todavía no hay referidores.</td>
+                  <td colSpan={8}>Todavía no hay referidores.</td>
                 </tr>
               )}
             </tbody>
@@ -144,6 +167,7 @@ export default async function ReferidosAdminPage() {
                 <th>Contacto</th>
                 <th>Referido por</th>
                 <th>Estado</th>
+                <th>Comisión</th>
                 <th>Notas</th>
                 <th>Fecha</th>
               </tr>
@@ -151,6 +175,7 @@ export default async function ReferidosAdminPage() {
             <tbody>
               {leads.map((lead) => {
                 const referrer = lead.referrer_id ? referrerById.get(lead.referrer_id) : undefined;
+                const amount = commissionGs(referrer, 1);
                 return (
                   <tr key={lead.id}>
                     <td>{lead.name}</td>
@@ -162,6 +187,7 @@ export default async function ReferidosAdminPage() {
                     <td>
                       <StatusSelect leadId={lead.id} status={lead.status} />
                     </td>
+                    <td>{amount !== null ? `Gs. ${amount.toLocaleString("es-PY")}` : "—"}</td>
                     <td>
                       <NotesField leadId={lead.id} notes={lead.notes ?? ""} />
                     </td>
@@ -171,7 +197,7 @@ export default async function ReferidosAdminPage() {
               })}
               {leads.length === 0 && (
                 <tr>
-                  <td colSpan={6}>Todavía no hay leads referidos.</td>
+                  <td colSpan={7}>Todavía no hay leads referidos.</td>
                 </tr>
               )}
             </tbody>
@@ -180,8 +206,8 @@ export default async function ReferidosAdminPage() {
       </section>
 
       <p className="adminReferidosLegend">
-        Estados: {Object.entries(STATUS_LABELS).map(([, label]) => label).join(" → ")}. Comisión: Gs. 90.000 por
-        cliente que paga la configuración completa.
+        Estados: {Object.entries(STATUS_LABELS).map(([, label]) => label).join(" → ")}. Comisión = % configurado ×
+        Gs. 600.000.
       </p>
     </main>
   );
