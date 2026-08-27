@@ -145,7 +145,12 @@ export default async function ReferidosAdminPage() {
                     <CommissionSelect referrerId={r.id} commissionPercent={r.commission_percent} />
                   </td>
                   <td>
-                    <CreateLoginButton referrerId={r.id} hasLogin={Boolean(r.user_id)} />
+                    <CreateLoginButton
+                      referrerId={r.id}
+                      code={r.code}
+                      hasLogin={Boolean(r.user_id)}
+                      onboarded={r.onboarded}
+                    />
                   </td>
                   <td>{new Date(r.created_at).toLocaleDateString("es-PY")}</td>
                 </tr>

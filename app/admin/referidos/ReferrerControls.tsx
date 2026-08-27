@@ -35,14 +35,54 @@ export function CommissionSelect({ referrerId, commissionPercent }: { referrerId
   );
 }
 
-export function CreateLoginButton({ referrerId, hasLogin }: { referrerId: string; hasLogin: boolean }) {
+function CopyableLogin({ email }: { email: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      type="button"
+      className="adminReferidosLoginEmail"
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(email);
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        } catch {
+          // no-op
+        }
+      }}
+    >
+      <Copy size={11} /> {copied ? "¡Copiado!" : email}
+    </button>
+  );
+}
+
+export function CreateLoginButton({
+  referrerId,
+  code,
+  hasLogin,
+  onboarded,
+}: {
+  referrerId: string;
+  code: string;
+  hasLogin: boolean;
+  onboarded: boolean;
+}) {
   const [isPending, startTransition] = useTransition();
   const [credentials, setCredentials] = useState<{ email: string; tempPassword: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
+  const loginEmail = `${code}@login.wendelo.local`;
+
   if (hasLogin && !credentials) {
-    return <span className="adminReferidosLoginBadge">Tiene login</span>;
+    return (
+      <div className="adminReferidosLoginInfo">
+        <CopyableLogin email={loginEmail} />
+        <span className={onboarded ? "adminReferidosOnboardedYes" : "adminReferidosOnboardedNo"}>
+          {onboarded ? "Ya configuró su cuenta" : "Todavía no ingresó"}
+        </span>
+      </div>
+    );
   }
 
   if (credentials) {
