@@ -1,7 +1,9 @@
+// Zielpfad im Repo: app/de/ContactSection.tsx (ersetzt die bestehende Datei)
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
 import { Check, Send } from "lucide-react";
+import { createClient } from "../lib/supabase/client";
 
 export default function ContactSection() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -19,6 +21,23 @@ export default function ContactSection() {
     setStatus("sending");
     const form = e.currentTarget;
     const data = new FormData(form);
+
+    // Best effort: erfasst den geworbenen Lead fürs interne Panel. Darf den
+    // Hauptversand nicht blockieren, falls es fehlschlägt.
+    if (refCode) {
+      const supabase = createClient();
+      supabase
+        .from("referral_leads")
+        .insert({
+          referral_code: refCode,
+          name: String(data.get("name") ?? ""),
+          email: String(data.get("email") ?? ""),
+          whatsapp: String(data.get("phone") ?? ""),
+          message: String(data.get("message") ?? ""),
+        })
+        .then(() => {});
+    }
+
     try {
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
