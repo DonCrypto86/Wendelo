@@ -26,6 +26,16 @@ const examples = [
     statLabel: "productos organizados",
     logo: "https://papamuaythai.wendelo.online/brand/papa-muay-thai-logo.webp",
   },
+  {
+    name: "La Hacienda",
+    description:
+      "La Hacienda usa su catálogo WENDELO para mostrar sus cortes de carne, mantenerlos actualizados y atender cada pedido directamente por WhatsApp.",
+    href: "https://la-hacienda.wendelo.online",
+    category: "Carnes seleccionadas",
+    stat: "13",
+    statLabel: "productos organizados",
+    logo: "https://la-hacienda.wendelo.online/brand/la-hacienda-logo.png",
+  },
 ];
 
 export default function DemoSection() {
