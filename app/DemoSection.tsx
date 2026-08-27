@@ -36,6 +36,16 @@ const examples = [
     statLabel: "productos organizados",
     logo: "https://la-hacienda.wendelo.online/brand/la-hacienda-logo.png",
   },
+  {
+    name: "Goshena",
+    description:
+      "Goshena usa su catálogo WENDELO para mostrar sus productos naturales, mantenerlos actualizados y atender cada pedido directamente por WhatsApp.",
+    href: "https://goshena.wendelo.online",
+    category: "Productos naturales",
+    stat: "8",
+    statLabel: "productos organizados",
+    logo: "https://goshena.wendelo.online/brand/goshena-logo.png",
+  },
 ];
 
 export default function DemoSection() {
