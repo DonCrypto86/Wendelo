@@ -11,6 +11,7 @@ export default function CompletarPerfilPage() {
   const [name, setName] = useState("");
   const [cedula, setCedula] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -28,6 +29,7 @@ export default function CompletarPerfilPage() {
           setName(dashboard.name ?? "");
           setCedula(dashboard.cedula ?? "");
           setWhatsapp(dashboard.whatsapp ?? "");
+          setEmail(dashboard.email ?? "");
           if (dashboard.onboarded) {
             router.replace("/panel");
             return;
@@ -65,6 +67,7 @@ export default function CompletarPerfilPage() {
       p_name: name,
       p_cedula: cedula,
       p_whatsapp: whatsapp,
+      p_email: email,
     });
     setLoading(false);
 
@@ -103,6 +106,10 @@ export default function CompletarPerfilPage() {
         <label>
           WhatsApp
           <input type="tel" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} required />
+        </label>
+        <label>
+          Email
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </label>
         <label>
           Nueva contraseña
