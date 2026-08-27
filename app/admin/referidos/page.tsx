@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "../../lib/supabase/server";
 import { signOutAdmin } from "./actions";
 import { StatusSelect, NotesField, ReferrerSelect, STATUS_LABELS } from "./LeadControls";
-import { CommissionSelect, CreateLoginButton } from "./ReferrerControls";
+import { CommissionSelect, CreateLoginButton, EditReferrerButton, NewReferrerForm } from "./ReferrerControls";
 
 type Referrer = {
   id: string;
@@ -158,7 +158,10 @@ export default async function ReferidosAdminPage() {
       </div>
 
       <section>
-        <h2>Referidores</h2>
+        <div className="adminReferidosSectionHead">
+          <h2>Referidores</h2>
+          <NewReferrerForm />
+        </div>
         <div className="adminReferidosTableWrap">
           <table className="adminReferidosTable">
             <thead>
@@ -173,6 +176,7 @@ export default async function ReferidosAdminPage() {
                 <th>Comisión</th>
                 <th>Login</th>
                 <th>Desde</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -199,11 +203,14 @@ export default async function ReferidosAdminPage() {
                     />
                   </td>
                   <td>{new Date(r.created_at).toLocaleDateString("es-PY")}</td>
+                  <td>
+                    <EditReferrerButton referrer={r} />
+                  </td>
                 </tr>
               ))}
               {referrers.length === 0 && (
                 <tr>
-                  <td colSpan={10}>Todavía no hay referidores.</td>
+                  <td colSpan={11}>Todavía no hay referidores.</td>
                 </tr>
               )}
             </tbody>

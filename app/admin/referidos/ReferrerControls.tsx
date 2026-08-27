@@ -1,9 +1,14 @@
 // Zielpfad im Repo: app/admin/referidos/ReferrerControls.tsx
 "use client";
 
-import { useState, useTransition } from "react";
-import { Copy, KeyRound } from "lucide-react";
-import { updateReferrerCommission, createReferrerLogin } from "./actions";
+import { useState, useTransition, type FormEvent } from "react";
+import { Copy, KeyRound, Pencil, Plus } from "lucide-react";
+import {
+  updateReferrerCommission,
+  createReferrerLogin,
+  updateReferrerProfile,
+  createReferrerManually,
+} from "./actions";
 
 const COMMISSION_OPTIONS = [15, 20, 30, 50];
 
@@ -53,6 +58,148 @@ function CopyableLogin({ email }: { email: string }) {
     >
       <Copy size={11} /> {copied ? "¡Copiado!" : email}
     </button>
+  );
+}
+
+export function EditReferrerButton({
+  referrer,
+}: {
+  referrer: { id: string; name: string; cedula: string; whatsapp: string; email: string | null };
+}) {
+  const [editing, setEditing] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+
+  if (!editing) {
+    return (
+      <button type="button" className="adminReferidosEditBtn" onClick={() => setEditing(true)}>
+        <Pencil size={12} /> Editar
+      </button>
+    );
+  }
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError(null);
+    const data = new FormData(e.currentTarget);
+    const fields = {
+      name: String(data.get("name") ?? ""),
+      cedula: String(data.get("cedula") ?? ""),
+      whatsapp: String(data.get("whatsapp") ?? ""),
+      email: String(data.get("email") ?? ""),
+    };
+    startTransition(async () => {
+      try {
+        await updateReferrerProfile(referrer.id, fields);
+        setEditing(false);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error al guardar");
+      }
+    });
+  }
+
+  return (
+    <form className="adminReferidosEditForm" onSubmit={handleSubmit}>
+      <label>
+        Nombre
+        <input name="name" defaultValue={referrer.name} required disabled={isPending} />
+      </label>
+      <label>
+        Cédula
+        <input name="cedula" defaultValue={referrer.cedula} required disabled={isPending} />
+      </label>
+      <label>
+        WhatsApp
+        <input name="whatsapp" defaultValue={referrer.whatsapp} required disabled={isPending} />
+      </label>
+      <label>
+        Email
+        <input name="email" type="email" defaultValue={referrer.email ?? ""} disabled={isPending} />
+      </label>
+      {error && <p className="adminReferidosError">{error}</p>}
+      <div className="adminReferidosEditFormActions">
+        <button type="submit" disabled={isPending}>
+          {isPending ? "Guardando..." : "Guardar"}
+        </button>
+        <button type="button" disabled={isPending} onClick={() => setEditing(false)}>
+          Cancelar
+        </button>
+      </div>
+    </form>
+  );
+}
+
+export function NewReferrerForm() {
+  const [open, setOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+  const [createdCode, setCreatedCode] = useState<string | null>(null);
+
+  if (!open) {
+    return (
+      <button type="button" className="adminReferidosNewBtn" onClick={() => setOpen(true)}>
+        <Plus size={14} /> Nuevo referidor
+      </button>
+    );
+  }
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError(null);
+    const data = new FormData(e.currentTarget);
+    const fields = {
+      name: String(data.get("name") ?? ""),
+      cedula: String(data.get("cedula") ?? ""),
+      whatsapp: String(data.get("whatsapp") ?? ""),
+      email: String(data.get("email") ?? ""),
+    };
+    startTransition(async () => {
+      try {
+        const result = await createReferrerManually(fields);
+        setCreatedCode(result.code);
+        (e.target as HTMLFormElement).reset();
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error al crear el referidor");
+      }
+    });
+  }
+
+  return (
+    <div className="adminReferidosNewFormWrap">
+      <form className="adminReferidosEditForm adminReferidosNewForm" onSubmit={handleSubmit}>
+        <label>
+          Nombre
+          <input name="name" required disabled={isPending} />
+        </label>
+        <label>
+          Cédula
+          <input name="cedula" required disabled={isPending} />
+        </label>
+        <label>
+          WhatsApp
+          <input name="whatsapp" required disabled={isPending} />
+        </label>
+        <label>
+          Email
+          <input name="email" type="email" disabled={isPending} />
+        </label>
+        {error && <p className="adminReferidosError">{error}</p>}
+        {createdCode && (
+          <p className="adminReferidosNewSuccess">
+            Creado con código <strong>{createdCode}</strong>. Ahora podés asignarle comisión y crear su login abajo
+            en la tabla.
+          </p>
+        )}
+        <div className="adminReferidosEditFormActions">
+          <button type="submit" disabled={isPending}>
+            {isPending ? "Creando..." : "Crear"}
+          </button>
+          <button type="button" disabled={isPending} onClick={() => setOpen(false)}>
+            Cerrar
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
 

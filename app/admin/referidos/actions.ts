@@ -70,6 +70,54 @@ export async function updateLeadReferrer(leadId: string, referrerId: string | nu
   revalidatePath("/admin/referidos");
 }
 
+export async function updateReferrerProfile(
+  referrerId: string,
+  fields: { name: string; cedula: string; whatsapp: string; email: string }
+) {
+  if (!fields.name.trim()) throw new Error("El nombre es obligatorio");
+  if (!fields.cedula.trim()) throw new Error("La cédula es obligatoria");
+  if (!fields.whatsapp.trim()) throw new Error("El WhatsApp es obligatorio");
+
+  const { supabase } = await requireAdmin();
+  const { error } = await supabase
+    .from("referrers")
+    .update({
+      name: fields.name.trim(),
+      cedula: fields.cedula.trim(),
+      whatsapp: fields.whatsapp.trim(),
+      email: fields.email.trim() || null,
+    })
+    .eq("id", referrerId);
+  if (error) throw error;
+  revalidatePath("/admin/referidos");
+}
+
+export async function createReferrerManually(fields: {
+  name: string;
+  cedula: string;
+  whatsapp: string;
+  email: string;
+}): Promise<{ code: string }> {
+  if (!fields.name.trim()) throw new Error("El nombre es obligatorio");
+  if (!fields.cedula.trim()) throw new Error("La cédula es obligatoria");
+  if (!fields.whatsapp.trim()) throw new Error("El WhatsApp es obligatorio");
+
+  const { supabase } = await requireAdmin();
+  const { data, error } = await supabase
+    .from("referrers")
+    .insert({
+      name: fields.name.trim(),
+      cedula: fields.cedula.trim(),
+      whatsapp: fields.whatsapp.trim(),
+      email: fields.email.trim() || null,
+    })
+    .select("code")
+    .single();
+  if (error || !data) throw error ?? new Error("No se pudo crear el referidor");
+  revalidatePath("/admin/referidos");
+  return { code: data.code };
+}
+
 export async function updateReferrerCommission(referrerId: string, percent: number) {
   if (!VALID_COMMISSIONS.includes(percent)) {
     throw new Error("Porcentaje inválido");
