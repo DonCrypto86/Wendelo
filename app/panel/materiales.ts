@@ -11,7 +11,7 @@ export const PROMO_TEXTS = [
   {
     id: "chat",
     label: "Para mandar por chat",
-    text: "Che, te cuento de WENDELO 🔗 Es un catálogo digital para mostrar todos tus productos con un solo link, siempre actualizado, y cada consulta te llega directo por WhatsApp. Sin carrito, sin complicaciones. Mirá cómo funciona: {link}",
+    text: "Te comento sobre WENDELO 🔗 Es un catálogo digital para mostrar todos tus productos con un solo link, siempre actualizado, y cada consulta te llega directo por WhatsApp. Sin carrito, sin complicaciones. Mirá cómo funciona: {link}",
   },
   {
     id: "bio",
