@@ -2,13 +2,11 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Check, Copy, Send } from "lucide-react";
+import { Check, Send } from "lucide-react";
 import { createClient } from "../lib/supabase/client";
 
 export default function ReferralForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-  const [link, setLink] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -31,11 +29,13 @@ export default function ReferralForm() {
       return;
     }
 
-    // Benachrichtigungs-E-Mail als Hinweis; der Link steht so oder so bereits.
+    // Benachrichtigungs-E-Mail als Hinweis; die Anfrage ist so oder so schon
+    // gespeichert. Der Link wird NICHT automatisch angezeigt oder
+    // verschickt: er wartet auf manuelle Freigabe in /admin/referidos.
     try {
       const fd = new FormData();
       fd.append("access_key", "26fed38b-36d3-49b3-9233-281feb48727b");
-      fd.append("subject", "Neuer Empfehlungslink generiert - WENDELO (DE)");
+      fd.append("subject", "Neue Empfehlungs-Anfrage - WENDELO (DE)");
       fd.append("from_name", "WENDELO Empfehlungen");
       fd.append("name", name);
       fd.append("cedula", cedula);
@@ -50,35 +50,15 @@ export default function ReferralForm() {
       // no-op
     }
 
-    setLink(`https://wendelo.online?ref=${code}`);
     setStatus("sent");
     form.reset();
   }
 
-  async function handleCopy() {
-    if (!link) return;
-    try {
-      await navigator.clipboard.writeText(link);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // no-op
-    }
-  }
-
-  if (status === "sent" && link) {
+  if (status === "sent") {
     return (
       <div className="referralSent">
         <Check size={15} />
-        <div>
-          <p>Fertig! Das ist dein Empfehlungslink:</p>
-          <div className="referralLinkBox">
-            <code>{link}</code>
-            <button type="button" onClick={handleCopy}>
-              <Copy size={14} /> {copied ? "Kopiert!" : "Kopieren"}
-            </button>
-          </div>
-        </div>
+        <p>Danke! Wir haben deine Anfrage erhalten und melden uns, um deinen Empfehlungslink zu bestätigen.</p>
       </div>
     );
   }

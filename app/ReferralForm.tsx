@@ -2,13 +2,11 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Check, Copy, Send } from "lucide-react";
+import { Check, Send } from "lucide-react";
 import { createClient } from "./lib/supabase/client";
 
 export default function ReferralForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-  const [link, setLink] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -31,12 +29,14 @@ export default function ReferralForm() {
       return;
     }
 
-    // Notificación por email a modo de aviso; el link ya quedó generado
-    // independientemente de si esto falla.
+    // Notificación por email a modo de aviso; la solicitud ya quedó
+    // registrada independientemente de si esto falla. El link NO se
+    // muestra ni se envía automáticamente: queda pendiente de revisión
+    // manual en /admin/referidos.
     try {
       const fd = new FormData();
       fd.append("access_key", "26fed38b-36d3-49b3-9233-281feb48727b");
-      fd.append("subject", "Nuevo link de referido generado - WENDELO");
+      fd.append("subject", "Nueva solicitud de referido - WENDELO");
       fd.append("from_name", "WENDELO Referidos");
       fd.append("name", name);
       fd.append("cedula", cedula);
@@ -51,35 +51,15 @@ export default function ReferralForm() {
       // no-op
     }
 
-    setLink(`https://wendelo.online?ref=${code}`);
     setStatus("sent");
     form.reset();
   }
 
-  async function handleCopy() {
-    if (!link) return;
-    try {
-      await navigator.clipboard.writeText(link);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // no-op
-    }
-  }
-
-  if (status === "sent" && link) {
+  if (status === "sent") {
     return (
       <div className="referralSent">
         <Check size={15} />
-        <div>
-          <p>¡Listo! Este es tu link de referido:</p>
-          <div className="referralLinkBox">
-            <code>{link}</code>
-            <button type="button" onClick={handleCopy}>
-              <Copy size={14} /> {copied ? "¡Copiado!" : "Copiar"}
-            </button>
-          </div>
-        </div>
+        <p>¡Gracias! Recibimos tu solicitud. Te vamos a escribir para confirmar tu link de referido.</p>
       </div>
     );
   }
