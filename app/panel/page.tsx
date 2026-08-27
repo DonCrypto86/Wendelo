@@ -19,6 +19,7 @@ type Dashboard = {
   whatsapp: string;
   commission_percent: number | null;
   onboarded: boolean;
+  click_count: number;
   leads: { name: string; status: string; created_at: string }[];
   counts: DashboardCounts;
 };
@@ -83,6 +84,10 @@ export default async function PanelPage() {
       {dashboard.commission_percent ? (
         <div className="panelStats">
           <div>
+            <strong>{dashboard.click_count}</strong>
+            <span>Clics en tu link</span>
+          </div>
+          <div>
             <strong>{totalLeads}</strong>
             <span>Personas referidas</span>
           </div>
@@ -101,6 +106,10 @@ export default async function PanelPage() {
         </div>
       ) : (
         <div className="panelStats">
+          <div>
+            <strong>{dashboard.click_count}</strong>
+            <span>Clics en tu link</span>
+          </div>
           <div>
             <strong>{totalLeads}</strong>
             <span>Personas referidas</span>

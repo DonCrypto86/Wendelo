@@ -31,6 +31,20 @@ type ReferralLead = {
   created_at: string;
 };
 
+type ReferralLinkVisit = {
+  source_type: "referrer" | "catalog";
+  code: string;
+};
+
+type Tenant = {
+  slug: string;
+  name: string;
+};
+
+function catalogLabel(slug: string, tenants: Tenant[]) {
+  return tenants.find((t) => t.slug === slug)?.name ?? slug;
+}
+
 export const dynamic = "force-dynamic";
 
 export default async function ReferidosAdminPage() {
@@ -54,13 +68,18 @@ export default async function ReferidosAdminPage() {
     redirect("/admin/referidos/login");
   }
 
-  const [{ data: referrersData }, { data: leadsData }] = await Promise.all([
-    supabase.from("referrers").select("*").order("created_at", { ascending: false }),
-    supabase.from("referral_leads").select("*").order("created_at", { ascending: false }),
-  ]);
+  const [{ data: referrersData }, { data: leadsData }, { data: visitsData }, { data: tenantsData }] =
+    await Promise.all([
+      supabase.from("referrers").select("*").order("created_at", { ascending: false }),
+      supabase.from("referral_leads").select("*").order("created_at", { ascending: false }),
+      supabase.from("referral_link_visits").select("source_type, code"),
+      supabase.from("tenants").select("slug, name"),
+    ]);
 
   const referrers = (referrersData ?? []) as Referrer[];
   const leads = (leadsData ?? []) as ReferralLead[];
+  const visits = (visitsData ?? []) as ReferralLinkVisit[];
+  const tenants = (tenantsData ?? []) as Tenant[];
 
   const referrerById = new Map(referrers.map((r) => [r.id, r]));
   const leadCountByReferrer = new Map<string, number>();
@@ -69,6 +88,31 @@ export default async function ReferidosAdminPage() {
       leadCountByReferrer.set(lead.referrer_id, (leadCountByReferrer.get(lead.referrer_id) ?? 0) + 1);
     }
   }
+
+  const clickCountByReferrerCode = new Map<string, number>();
+  const clickCountByCatalogCode = new Map<string, number>();
+  for (const visit of visits) {
+    const map = visit.source_type === "referrer" ? clickCountByReferrerCode : clickCountByCatalogCode;
+    map.set(visit.code, (map.get(visit.code) ?? 0) + 1);
+  }
+
+  const leadCountByCatalogCode = new Map<string, number>();
+  for (const lead of leads) {
+    if (!lead.referrer_id && lead.referral_code?.startsWith("cat-")) {
+      leadCountByCatalogCode.set(lead.referral_code, (leadCountByCatalogCode.get(lead.referral_code) ?? 0) + 1);
+    }
+  }
+
+  const catalogRows = tenants.map((t) => {
+    const code = `cat-${t.slug}`;
+    return {
+      slug: t.slug,
+      name: t.name,
+      code,
+      clicks: clickCountByCatalogCode.get(code) ?? 0,
+      leads: leadCountByCatalogCode.get(code) ?? 0,
+    };
+  });
 
   function commissionGs(referrer: Referrer | undefined, count: number) {
     if (!referrer?.commission_percent) return null;
@@ -124,6 +168,7 @@ export default async function ReferidosAdminPage() {
                 <th>WhatsApp</th>
                 <th>Email</th>
                 <th>Cédula</th>
+                <th>Clics</th>
                 <th>Leads</th>
                 <th>Comisión</th>
                 <th>Login</th>
@@ -140,6 +185,7 @@ export default async function ReferidosAdminPage() {
                   <td>{r.whatsapp}</td>
                   <td>{r.email ?? "—"}</td>
                   <td>{r.cedula}</td>
+                  <td>{clickCountByReferrerCode.get(r.code) ?? 0}</td>
                   <td>{leadCountByReferrer.get(r.id) ?? 0}</td>
                   <td>
                     <CommissionSelect referrerId={r.id} commissionPercent={r.commission_percent} />
@@ -157,7 +203,7 @@ export default async function ReferidosAdminPage() {
               ))}
               {referrers.length === 0 && (
                 <tr>
-                  <td colSpan={9}>Todavía no hay referidores.</td>
+                  <td colSpan={10}>Todavía no hay referidores.</td>
                 </tr>
               )}
             </tbody>
@@ -193,7 +239,12 @@ export default async function ReferidosAdminPage() {
                     </td>
                     <td>
                       <ReferrerSelect leadId={lead.id} referrerId={lead.referrer_id} referrers={referrers} />
-                      {!lead.referrer_id && lead.referral_code && (
+                      {!lead.referrer_id && lead.referral_code?.startsWith("cat-") && (
+                        <span className="adminReferidosOrphanCode">
+                          Vino desde el catálogo: {catalogLabel(lead.referral_code.slice(4), tenants)}
+                        </span>
+                      )}
+                      {!lead.referrer_id && lead.referral_code && !lead.referral_code.startsWith("cat-") && (
                         <span className="adminReferidosOrphanCode">Código usado: {lead.referral_code}</span>
                       )}
                     </td>
@@ -211,6 +262,43 @@ export default async function ReferidosAdminPage() {
               {leads.length === 0 && (
                 <tr>
                   <td colSpan={7}>Todavía no hay leads referidos.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2>Tráfico desde catálogos</h2>
+        <p className="adminReferidosCatalogNote">
+          Cada catálogo tiene su propio link de vuelta a wendelo.online. Acá ves cuántos clics e interesados generó
+          cada uno.
+        </p>
+        <div className="adminReferidosTableWrap">
+          <table className="adminReferidosTable">
+            <thead>
+              <tr>
+                <th>Catálogo</th>
+                <th>Link a usar</th>
+                <th>Clics</th>
+                <th>Leads</th>
+              </tr>
+            </thead>
+            <tbody>
+              {catalogRows.map((c) => (
+                <tr key={c.slug}>
+                  <td>{c.name}</td>
+                  <td>
+                    <code className="adminReferidosCatalogLink">https://wendelo.online?ref={c.code}</code>
+                  </td>
+                  <td>{c.clicks}</td>
+                  <td>{c.leads}</td>
+                </tr>
+              ))}
+              {catalogRows.length === 0 && (
+                <tr>
+                  <td colSpan={4}>Todavía no hay catálogos registrados.</td>
                 </tr>
               )}
             </tbody>
