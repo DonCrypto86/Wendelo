@@ -12,6 +12,7 @@ export default function CompletarPerfilPage() {
   const [cedula, setCedula] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -30,6 +31,7 @@ export default function CompletarPerfilPage() {
           setCedula(dashboard.cedula ?? "");
           setWhatsapp(dashboard.whatsapp ?? "");
           setEmail(dashboard.email ?? "");
+          setCode(dashboard.code ?? "");
           if (dashboard.onboarded) {
             router.replace("/panel");
             return;
@@ -43,6 +45,12 @@ export default function CompletarPerfilPage() {
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
+
+    const trimmedCode = code.trim().toLowerCase();
+    if (trimmedCode && !/^[a-z0-9][a-z0-9-]{1,30}[a-z0-9]$/.test(trimmedCode)) {
+      setError("Tu link solo puede tener letras, números y guiones (3 a 32 caracteres).");
+      return;
+    }
 
     if (password.length < 8) {
       setError("La contraseña debe tener al menos 8 caracteres.");
@@ -68,11 +76,16 @@ export default function CompletarPerfilPage() {
       p_cedula: cedula,
       p_whatsapp: whatsapp,
       p_email: email,
+      p_code: trimmedCode || null,
     });
     setLoading(false);
 
     if (profileError) {
-      setError("No se pudieron guardar tus datos. Probá de nuevo.");
+      setError(
+        profileError.message?.includes("en uso")
+          ? "Ese link ya está en uso. Probá con otro."
+          : "No se pudieron guardar tus datos. Probá de nuevo."
+      );
       return;
     }
 
@@ -111,6 +124,17 @@ export default function CompletarPerfilPage() {
           Email
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </label>
+        <label>
+          Tu link (opcional, podés dejar el que ya tenés)
+          <input
+            type="text"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            pattern="[a-zA-Z0-9-]{3,32}"
+            placeholder="tu-nombre"
+          />
+        </label>
+        <p className="panelOnboardCodePreview">wendelo.online?ref={code.trim().toLowerCase() || "..."}</p>
         <label>
           Nueva contraseña
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} />

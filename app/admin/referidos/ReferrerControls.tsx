@@ -8,6 +8,7 @@ import {
   createReferrerLogin,
   updateReferrerProfile,
   createReferrerManually,
+  updateReferrerCode,
 } from "./actions";
 
 const COMMISSION_OPTIONS = [15, 20, 30, 50];
@@ -58,6 +59,52 @@ function CopyableLogin({ email }: { email: string }) {
     >
       <Copy size={11} /> {copied ? "¡Copiado!" : email}
     </button>
+  );
+}
+
+export function EditCodeButton({ referrerId, code }: { referrerId: string; code: string }) {
+  const [editing, setEditing] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+
+  if (!editing) {
+    return (
+      <div className="adminReferidosCodeCell">
+        <code>{code}</code>
+        <button type="button" className="adminReferidosEditCodeBtn" onClick={() => setEditing(true)}>
+          <Pencil size={11} />
+        </button>
+      </div>
+    );
+  }
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError(null);
+    const value = String(new FormData(e.currentTarget).get("code") ?? "");
+    startTransition(async () => {
+      try {
+        await updateReferrerCode(referrerId, value);
+        setEditing(false);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error al guardar");
+      }
+    });
+  }
+
+  return (
+    <form className="adminReferidosCodeForm" onSubmit={handleSubmit}>
+      <input name="code" defaultValue={code} required disabled={isPending} pattern="[a-z0-9][a-z0-9-]{1,30}[a-z0-9]" />
+      <div className="adminReferidosEditFormActions">
+        <button type="submit" disabled={isPending}>
+          {isPending ? "..." : "Guardar"}
+        </button>
+        <button type="button" disabled={isPending} onClick={() => setEditing(false)}>
+          Cancelar
+        </button>
+      </div>
+      {error && <p className="adminReferidosError">{error}</p>}
+    </form>
   );
 }
 
@@ -205,12 +252,12 @@ export function NewReferrerForm() {
 
 export function CreateLoginButton({
   referrerId,
-  code,
+  loginEmail: existingLoginEmail,
   hasLogin,
   onboarded,
 }: {
   referrerId: string;
-  code: string;
+  loginEmail: string | null;
   hasLogin: boolean;
   onboarded: boolean;
 }) {
@@ -219,7 +266,7 @@ export function CreateLoginButton({
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  const loginEmail = `${code}@login.wendelo.local`;
+  const loginEmail = credentials?.email ?? existingLoginEmail ?? "";
 
   if (hasLogin && !credentials) {
     return (

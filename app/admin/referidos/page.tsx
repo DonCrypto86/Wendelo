@@ -3,7 +3,13 @@ import { redirect } from "next/navigation";
 import { createClient } from "../../lib/supabase/server";
 import { signOutAdmin } from "./actions";
 import { StatusSelect, NotesField, ReferrerSelect, STATUS_LABELS } from "./LeadControls";
-import { CommissionSelect, CreateLoginButton, EditReferrerButton, NewReferrerForm } from "./ReferrerControls";
+import {
+  CommissionSelect,
+  CreateLoginButton,
+  EditReferrerButton,
+  EditCodeButton,
+  NewReferrerForm,
+} from "./ReferrerControls";
 
 type Referrer = {
   id: string;
@@ -12,6 +18,7 @@ type Referrer = {
   whatsapp: string;
   email: string | null;
   code: string;
+  login_email: string | null;
   created_at: string;
   user_id: string | null;
   commission_percent: number | null;
@@ -184,7 +191,7 @@ export default async function ReferidosAdminPage() {
                 <tr key={r.id}>
                   <td>{r.name}</td>
                   <td>
-                    <code>{r.code}</code>
+                    <EditCodeButton referrerId={r.id} code={r.code} />
                   </td>
                   <td>{r.whatsapp}</td>
                   <td>{r.email ?? "—"}</td>
@@ -197,7 +204,7 @@ export default async function ReferidosAdminPage() {
                   <td>
                     <CreateLoginButton
                       referrerId={r.id}
-                      code={r.code}
+                      loginEmail={r.login_email}
                       hasLogin={Boolean(r.user_id)}
                       onboarded={r.onboarded}
                     />

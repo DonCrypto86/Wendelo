@@ -161,12 +161,22 @@ export async function createReferrerLogin(referrerId: string): Promise<{ email: 
 
   const { error: linkError } = await admin
     .from("referrers")
-    .update({ user_id: created.user.id })
+    .update({ user_id: created.user.id, login_email: email })
     .eq("id", referrerId);
   if (linkError) throw linkError;
 
   revalidatePath("/admin/referidos");
   return { email, tempPassword };
+}
+
+export async function updateReferrerCode(referrerId: string, code: string) {
+  const { supabase } = await requireAdmin();
+  const { error } = await supabase.rpc("admin_update_referrer_code", {
+    p_referrer_id: referrerId,
+    p_code: code,
+  });
+  if (error) throw new Error(error.message);
+  revalidatePath("/admin/referidos");
 }
 
 export async function signOutAdmin() {
