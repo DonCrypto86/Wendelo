@@ -2,7 +2,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { updateLeadStatus, updateLeadNotes } from "./actions";
+import { updateLeadStatus, updateLeadNotes, updateLeadReferrer } from "./actions";
 
 export const STATUS_LABELS: Record<string, string> = {
   nuevo: "Nuevo",
@@ -30,6 +30,39 @@ export function StatusSelect({ leadId, status }: { leadId: string; status: strin
       {Object.entries(STATUS_LABELS).map(([value, label]) => (
         <option key={value} value={value}>
           {label}
+        </option>
+      ))}
+    </select>
+  );
+}
+
+export function ReferrerSelect({
+  leadId,
+  referrerId,
+  referrers,
+}: {
+  leadId: string;
+  referrerId: string | null;
+  referrers: { id: string; name: string; code: string }[];
+}) {
+  const [isPending, startTransition] = useTransition();
+
+  return (
+    <select
+      defaultValue={referrerId ?? ""}
+      disabled={isPending}
+      className="adminReferidosReferrerSelect"
+      onChange={(e) => {
+        const value = e.target.value || null;
+        startTransition(() => {
+          updateLeadReferrer(leadId, value);
+        });
+      }}
+    >
+      <option value="">— Sin referidor —</option>
+      {referrers.map((r) => (
+        <option key={r.id} value={r.id}>
+          {r.name} ({r.code})
         </option>
       ))}
     </select>
