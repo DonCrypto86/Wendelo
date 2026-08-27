@@ -3,8 +3,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Copy, Download } from "lucide-react";
-import { PROMO_TEXTS, PROMO_BANNERS, buildEmbedSnippet } from "./materiales";
+import { Copy, Download, MessageCircle } from "lucide-react";
+import { PROMO_TEXTS, PROMO_BANNERS, buildEmbedSnippet, buildWhatsAppShareUrl } from "./materiales";
 
 function CopyButton({ text, label = "Copiar" }: { text: string; label?: string }) {
   const [copied, setCopied] = useState(false);
@@ -41,7 +41,17 @@ export default function MaterialesSection({ link }: { link: string }) {
               <div key={item.id} className="panelPromoText">
                 <span>{item.label}</span>
                 <p>{finalText}</p>
-                <CopyButton text={finalText} />
+                <div className="panelPromoTextActions">
+                  <CopyButton text={finalText} />
+                  <a
+                    href={buildWhatsAppShareUrl(finalText)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="panelWhatsAppShare"
+                  >
+                    <MessageCircle size={13} /> Compartir por WhatsApp
+                  </a>
+                </div>
               </div>
             );
           })}

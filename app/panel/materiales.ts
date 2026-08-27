@@ -21,11 +21,13 @@ export const PROMO_TEXTS = [
 ] as const;
 
 export const PROMO_BANNERS = [
-  { id: "vende-mas-1", label: "Vendé más. Publicá menos. (1)", file: "banner-vende-mas-1.png" },
-  { id: "vende-mas-2", label: "Vendé más. Publicá menos. (2)", file: "banner-vende-mas-2.png" },
-  { id: "catalogo-digital-1", label: "Tu catálogo digital (1)", file: "banner-catalogo-digital-1.png" },
-  { id: "catalogo-digital-2", label: "Tu catálogo digital (2)", file: "banner-catalogo-digital-2.png" },
+  { id: "vende-mas-1", label: "Vendé más. Publicá menos.", file: "banner-vende-mas-1.png" },
+  { id: "catalogo-digital-2", label: "Tu catálogo digital", file: "banner-catalogo-digital-2.png" },
 ] as const;
+
+export function buildWhatsAppShareUrl(text: string) {
+  return `https://wa.me/?text=${encodeURIComponent(text)}`;
+}
 
 export function buildEmbedSnippet(link: string, bannerFile: string) {
   return `<a href="${link}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none">

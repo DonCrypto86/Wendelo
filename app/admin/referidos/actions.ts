@@ -44,6 +44,32 @@ export async function updateLeadNotes(leadId: string, notes: string) {
   revalidatePath("/admin/referidos");
 }
 
+export async function updateLeadReferrer(leadId: string, referrerId: string | null) {
+  const { supabase } = await requireAdmin();
+
+  if (referrerId) {
+    const { data: referrer, error: fetchError } = await supabase
+      .from("referrers")
+      .select("id, code")
+      .eq("id", referrerId)
+      .single();
+    if (fetchError || !referrer) throw new Error("Referidor no encontrado");
+    const { error } = await supabase
+      .from("referral_leads")
+      .update({ referrer_id: referrerId, referral_code: referrer.code })
+      .eq("id", leadId);
+    if (error) throw error;
+  } else {
+    const { error } = await supabase
+      .from("referral_leads")
+      .update({ referrer_id: null })
+      .eq("id", leadId);
+    if (error) throw error;
+  }
+
+  revalidatePath("/admin/referidos");
+}
+
 export async function updateReferrerCommission(referrerId: string, percent: number) {
   if (!VALID_COMMISSIONS.includes(percent)) {
     throw new Error("Porcentaje inválido");

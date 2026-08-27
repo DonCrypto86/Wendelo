@@ -2,7 +2,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "../../lib/supabase/server";
 import { signOutAdmin } from "./actions";
-import { StatusSelect, NotesField, STATUS_LABELS } from "./LeadControls";
+import { StatusSelect, NotesField, ReferrerSelect, STATUS_LABELS } from "./LeadControls";
 import { CommissionSelect, CreateLoginButton } from "./ReferrerControls";
 
 type Referrer = {
@@ -10,6 +10,7 @@ type Referrer = {
   name: string;
   cedula: string;
   whatsapp: string;
+  email: string | null;
   code: string;
   created_at: string;
   user_id: string | null;
@@ -121,6 +122,7 @@ export default async function ReferidosAdminPage() {
                 <th>Nombre</th>
                 <th>Código</th>
                 <th>WhatsApp</th>
+                <th>Email</th>
                 <th>Cédula</th>
                 <th>Leads</th>
                 <th>Comisión</th>
@@ -136,6 +138,7 @@ export default async function ReferidosAdminPage() {
                     <code>{r.code}</code>
                   </td>
                   <td>{r.whatsapp}</td>
+                  <td>{r.email ?? "—"}</td>
                   <td>{r.cedula}</td>
                   <td>{leadCountByReferrer.get(r.id) ?? 0}</td>
                   <td>
@@ -149,7 +152,7 @@ export default async function ReferidosAdminPage() {
               ))}
               {referrers.length === 0 && (
                 <tr>
-                  <td colSpan={8}>Todavía no hay referidores.</td>
+                  <td colSpan={9}>Todavía no hay referidores.</td>
                 </tr>
               )}
             </tbody>
@@ -183,7 +186,12 @@ export default async function ReferidosAdminPage() {
                       {lead.email}
                       {lead.whatsapp ? ` · ${lead.whatsapp}` : ""}
                     </td>
-                    <td>{referrer ? `${referrer.name} (${referrer.code})` : lead.referral_code || "—"}</td>
+                    <td>
+                      <ReferrerSelect leadId={lead.id} referrerId={lead.referrer_id} referrers={referrers} />
+                      {!lead.referrer_id && lead.referral_code && (
+                        <span className="adminReferidosOrphanCode">Código usado: {lead.referral_code}</span>
+                      )}
+                    </td>
                     <td>
                       <StatusSelect leadId={lead.id} status={lead.status} />
                     </td>
